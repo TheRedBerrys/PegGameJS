@@ -1,5 +1,4 @@
-function OriginalRuleset()
-{
+function OriginalRuleset() {
 	this.description = "One Lower";
 	
 	this.canMove = function(index, current)
@@ -15,8 +14,7 @@ function OriginalRuleset()
 	}
 }
 
-function FactorRuleset()
-{
+function FactorRuleset() {
 	this.description = "Factors";
 	
 	this.canMove = function(index, current)
@@ -29,7 +27,6 @@ function FactorRuleset()
 	}
 }
 
-function Rulesets()
-{
+function Rulesets() {
 	return [new OriginalRuleset(), new FactorRuleset()];
 }

@@ -1,10 +1,67 @@
 <html>
 	<head>
 		<title>Peg Game</title>
-		<script type="text/javascript" src="Ruleset.js"/>
-		<script type="text/javascript" src="GameManager.js"/>
+		<script type="text/javascript" src="Ruleset.js"></script>
+		<script type="text/javascript" src="GameManager.js"></script>
 	</head>
 	<body>
 		<p id="p">Hello</p>
+		<table cellpadding="3">
+			<tr>
+				<td><canvas id="target1" height="50" width="50"/></td>
+				<td><canvas id="target2" height="50" width="50"/></td>
+				<td><canvas id="target3" height="50" width="50"/></td>
+				<td><canvas id="target4" height="50" width="50"/></td>
+				<td><canvas id="target5" height="50" width="50"/></td>
+				<td><canvas id="target6" height="50" width="50"/></td>
+				<td><canvas id="target7" height="50" width="50"/></td>
+				<td><canvas id="target8" height="50" width="50"/></td>
+			</tr>
+			<tr>
+				<td><canvas id="current1" height="50" width="50"/></td>
+				<td><canvas id="current2" height="50" width="50"/></td>
+				<td><canvas id="current3" height="50" width="50"/></td>
+				<td><canvas id="current4" height="50" width="50"/></td>
+				<td><canvas id="current5" height="50" width="50"/></td>
+				<td><canvas id="current6" height="50" width="50"/></td>
+				<td><canvas id="current7" height="50" width="50"/></td>
+				<td><canvas id="current8" height="50" width="50"/></td>
+			</tr>
+		</table>
+		<p id ="description">Description</p>
 	</body>
+    <script type="text/javascript">
+		var redraw = function() {
+			for (i = 1; i <=8; i++) {
+				var targetCanvas = document.getElementById("target" + i).getContext("2d");
+				var color = "red";
+				if (GameManager.targetPegs[i])
+					color = "green";
+					
+				targetCanvas.beginPath();
+				targetCanvas.rect(0, 0, 50, 50);
+				targetCanvas.fillStyle = color;
+				targetCanvas.fill();
+				targetCanvas.lineWidth = 3;
+				targetCanvas.strokeStyle = "black";
+				targetCanvas.stroke();
+				
+				var currentCanvas = document.getElementById("current" + i).getContext("2d");
+				var color = "red";
+				if (GameManager.currentPegs[i])
+					color = "green";
+					
+				currentCanvas.beginPath();
+				currentCanvas.rect(0, 0, 50, 50);
+				currentCanvas.fillStyle = color;
+				currentCanvas.fill();
+				currentCanvas.lineWidth = 3;
+				currentCanvas.strokeStyle = "black";
+				currentCanvas.stroke();
+			}
+			document.getElementById("description").innerHTML = GameManager.ruleset.description;
+		};
+		GameManager.startNewGame();
+		redraw();
+	</script>
 </html>
