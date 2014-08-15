@@ -86,11 +86,15 @@
 			
 			requestAnimFrame(drawNow);
 		}
+		
+		var setDrawTimeout = function(i) {
+				window.setTimeout(function() { drawPeg("target", i, GameManager.targetPegs[i]); }, i * 50);
+				window.setTimeout(function() { drawPeg("current", i, GameManager.currentPegs[i]); }, i * 50 + 100);
+		};
 	
 		var redraw = function() {
 			for (i = 1; i <= 8; i++) {
-				drawPeg("target", i, GameManager.targetPegs[i]);
-				drawPeg("current", i, GameManager.currentPegs[i]);
+				setDrawTimeout(i);
 			}
 			document.getElementById("description").innerHTML = "Ruleset: " + GameManager.ruleset.description;
 		};
@@ -113,7 +117,7 @@
 		for (eventIndex = 1; eventIndex <= 8; eventIndex++) {
 			var canvas = document.getElementById("current" + eventIndex);
 			canvas.addEventListener('click', function(event) { 
-				trySwitch(event.srcElement.id.substring(7,8)); 
+				trySwitch(event.target.id.substring(7,8)); 
 			});
 		}
 		
