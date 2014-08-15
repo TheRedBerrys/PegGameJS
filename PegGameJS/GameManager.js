@@ -29,3 +29,11 @@ GameManager.trySwitch = function(index) {
 		this.currentPegs[index] = !this.currentPegs[index];
 	}
 }
+
+GameManager.isComplete = function() {
+	for (i = 1; i <= 8; i++) {
+		if (this.currentPegs[i] != this.targetPegs[i])
+			return false;
+	}
+	return true;
+}
