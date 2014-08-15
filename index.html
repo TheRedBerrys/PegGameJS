@@ -45,25 +45,46 @@
 	</body>
     <script type="text/javascript">
 	
+		window.requestAnimFrame = (function(callback) {
+			return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+			function(callback) {
+			  window.setTimeout(callback, 1000 / 60);
+			};
+		  })();
+	
 		var drawPeg = function(type, index, value) {
-			var context = document.getElementById(type + i).getContext("2d");
+			var canvas = document.getElementById(type + index);
+			var context = canvas.getContext("2d");
 			
-			var rectX = 0;
-			var rectY = 0;
-			var rectWidth = 50;
-			var rectHeight = 50;
-			var cornerRadius = 10;
-			context.lineJoin = "round";
-			context.strokeStyle = "black";
+			var size = 0;
 			
-			context.lineWidth = cornerRadius;
-			if (value)
-				context.fillStyle = "yellow";
-			else
-				context.fillStyle = "gray";
+			var drawNow = function() {
+				size = size + 3;
+				if (size > 50)
+					size = 50;
+				var rectX = 0;
+				var rectY = (50 - size) / 2;
+				var rectWidth = 50;
+				var rectHeight = size;
+				var cornerRadius = 10;
+				context.lineJoin = "round";
+				context.strokeStyle = "black";
+				
+				context.lineWidth = cornerRadius;
+				if (value)
+					context.fillStyle = "yellow";
+				else
+					context.fillStyle = "gray";
+				
+				context.clearRect(0, 0, canvas.width, canvas.height);
+				context.strokeRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+				context.fillRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+				
+				if (size < 50)
+					requestAnimFrame(drawNow);
+			}
 			
-			context.strokeRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
-			context.fillRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+			requestAnimFrame(drawNow);
 		}
 	
 		var redraw = function() {
@@ -75,8 +96,10 @@
 		};
 		
 		var trySwitch = function(index) {
+			var oldValue = GameManager.currentPegs[index];
 			GameManager.trySwitch(index);
-			redraw();
+			var newValue = GameManager.currentPegs[index];
+			drawPeg("current", index, newValue);
 			
 			if (GameManager.isComplete()) {
 				GameManager.startNewGame();
