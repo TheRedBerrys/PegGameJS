@@ -5,9 +5,10 @@
 		<script type="text/javascript" src="GameManager.js"></script>
 	</head>
 	<body>
-		<p id="p">Hello</p>
+		<p id="p">Get the "Current" Pegs to match the "Target" Pegs</p>
 		<table cellpadding="3">
 			<tr>
+				<td>Target</td>
 				<td><canvas id="target1" height="50" width="50"/></td>
 				<td><canvas id="target2" height="50" width="50"/></td>
 				<td><canvas id="target3" height="50" width="50"/></td>
@@ -18,6 +19,7 @@
 				<td><canvas id="target8" height="50" width="50"/></td>
 			</tr>
 			<tr>
+				<td>Current</td>
 				<td><canvas id="current1" height="50" width="50"/></td>
 				<td><canvas id="current2" height="50" width="50"/></td>
 				<td><canvas id="current3" height="50" width="50"/></td>
@@ -27,40 +29,49 @@
 				<td><canvas id="current7" height="50" width="50"/></td>
 				<td><canvas id="current8" height="50" width="50"/></td>
 			</tr>
+			<tr>
+				<td></td>
+				<td><center>1</center></td>
+				<td><center>2</center></td>
+				<td><center>3</center></td>
+				<td><center>4</center></td>
+				<td><center>5</center></td>
+				<td><center>6</center></td>
+				<td><center>7</center></td>
+				<td><center>8</center></td>
+			</tr>
 		</table>
 		<p id ="description">Description</p>
 	</body>
     <script type="text/javascript">
 	
+		var drawPeg = function(type, index, value) {
+			var context = document.getElementById(type + i).getContext("2d");
+			
+			var rectX = 0;
+			var rectY = 0;
+			var rectWidth = 50;
+			var rectHeight = 50;
+			var cornerRadius = 10;
+			context.lineJoin = "round";
+			context.strokeStyle = "black";
+			
+			context.lineWidth = cornerRadius;
+			if (value)
+				context.fillStyle = "yellow";
+			else
+				context.fillStyle = "gray";
+			
+			context.strokeRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+			context.fillRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+		}
+	
 		var redraw = function() {
 			for (i = 1; i <= 8; i++) {
-				var targetCanvas = document.getElementById("target" + i).getContext("2d");
-				var color = "red";
-				if (GameManager.targetPegs[i])
-					color = "green";
-					
-				targetCanvas.beginPath();
-				targetCanvas.rect(0, 0, 50, 50);
-				targetCanvas.fillStyle = color;
-				targetCanvas.fill();
-				targetCanvas.lineWidth = 3;
-				targetCanvas.strokeStyle = "black";
-				targetCanvas.stroke();
-				
-				var currentCanvas = document.getElementById("current" + i).getContext("2d");
-				color = "red";
-				if (GameManager.currentPegs[i])
-					color = "green";
-					
-				currentCanvas.beginPath();
-				currentCanvas.rect(0, 0, 50, 50);
-				currentCanvas.fillStyle = color;
-				currentCanvas.fill();
-				currentCanvas.lineWidth = 3;
-				currentCanvas.strokeStyle = "black";
-				currentCanvas.stroke();
+				drawPeg("target", i, GameManager.targetPegs[i]);
+				drawPeg("current", i, GameManager.currentPegs[i]);
 			}
-			document.getElementById("description").innerHTML = GameManager.ruleset.description;
+			document.getElementById("description").innerHTML = "Ruleset: " + GameManager.ruleset.description;
 		};
 		
 		var trySwitch = function(index) {
